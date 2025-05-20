@@ -13,7 +13,7 @@ Simple python GUI application for logging Columbus State University student ID s
 * playsound  (```pip install playsound```)
 
 ### Usage
-1. Place barcode.py in a folder (```~/Desktop/barcode/```)
+1. Place ```barcode.py``` in a folder (```~/Desktop/barcode/```)
 2. Place ```error.mp3``` and ```success.mp3``` files in the same folder
 3. Run the program (```python3 barcode.py```)
 4. Scan a student ID or type it in manually and press enter
