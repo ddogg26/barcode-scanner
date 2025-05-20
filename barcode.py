@@ -4,11 +4,14 @@ import threading
 from playsound import playsound # type: ignore
 import tkinter as tk
 import csv
-import os
 from datetime import datetime
 
 # Folder where CSV files will be saved
 OUTPUT_FOLDER = os.path.expanduser('~/Desktop/barcode/scanner-data/')
+
+# Ensure the output folder exists
+if not os.path.exists(OUTPUT_FOLDER):
+    os.makedirs(OUTPUT_FOLDER)
 
 def flash_success():
     '''
@@ -62,32 +65,22 @@ def on_enter(event):
     scan_data = entry.get().strip()
     entry.delete(0, tk.END)
 
-    # Check if the scan_data is a valid student ID
-    # Format: 909XXXXXXXXX (9 digits, starting with 909)
-    # or a combination of student ID, date, and time
+    # Check if the scan_data is a valid student ID: 909XXXXXXXX (9 digits, starts with 909)
     if scan_data.isdigit() and len(scan_data) == 9 and scan_data.startswith("909"):
         student_id = scan_data
         now = datetime.now()
         date_str = now.strftime("%Y-%m-%d")
         time_str = now.strftime("%H:%M")
     else:
-        parts = scan_data.split()
-        if len(parts) == 3 and parts[0].isdigit() and len(parts[0]) == 9 and parts[0].startswith("909"):
-            student_id, date_str, time_str = parts
-            date_str = date_str.replace('/', '-')
-            time_parts = time_str.split(":")
-            time_str = ":".join(time_parts[:2])
-        else:
-            print("Unexpected input format:", scan_data)
-            flash_failure()
-            threading.Thread(target=play_error, daemon=True).start()
-
-            # Display error message on the screen
-            error_label = tk.Label(root, text="Check input and try again", font=("Helvetica", 24, "bold"), fg="black", bg="#f0f0f0")
-            error_label.place(relx=0.5, rely=0.75, anchor="center")
-            # Remove the error message after 5 seconds
-            root.after(5000, error_label.destroy)
-            return
+        print("Unexpected input format:", scan_data)
+        flash_failure()
+        threading.Thread(target=play_error, daemon=True).start()
+        # Display error message on the screen
+        error_label = tk.Label(root, text="Check input and try again", font=("Helvetica", 24, "bold"), fg="black", bg="#f0f0f0")
+        error_label.place(relx=0.5, rely=0.75, anchor="center")
+        # Remove the error message after 5 seconds
+        root.after(5000, error_label.destroy)
+        return
 
     csv_filename = f"scans_{date_str}.csv"
     file_path = os.path.join(OUTPUT_FOLDER, csv_filename)
