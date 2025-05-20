@@ -1,5 +1,5 @@
 # barcode-scanner
-Simple python GUI application for loggins Columbus State University student ID scans to CSV files. Designed for use with barcode scanners that emulate keyboard input.
+Simple python GUI application for logging Columbus State University student ID scans to CSV files. Designed for use with barcode scanners that emulate keyboard input.
 
 ### Features
 * Easy to use interface
